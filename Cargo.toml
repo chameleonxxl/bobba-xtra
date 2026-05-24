@@ -1,0 +1,39 @@
+[package]
+name = "bobba-xtra"
+version = "0.1.0"
+edition = "2024"
+description = "Habbo Origins crypto Xtra (BobbaXtra) for dirplayer-rs, built against the xtra-sdk plugin API."
+license = "GPL-3.0-only"
+publish = false
+
+# `cdylib` produces the .wasm the host loads dynamically. `rlib` lets the
+# crate be cargo-tested natively (the crypto and key-exchange unit tests
+# under #[cfg(test)] need real-host random + bignum).
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Path-relative to the submodule layout: bobba-xtra is consumed as
+# `dirplayer-rs/xtras/bobba-xtra/` so `../../xtra-sdk` points at
+# `dirplayer-rs/xtra-sdk/`. Cloning this repo standalone (outside the
+# submodule layout) won't build — that's the trade-off of path over
+# git-dep. Switch to `{ git = ... }` here once the SDK has a stable
+# published tag and bobba-xtra needs to be built outside dirplayer-rs.
+xtra-sdk = { path = "../../xtra-sdk" }
+
+# Modulo-exponentiation for the 438-bit Diffie-Hellman group.
+# `num` works fine on wasm with default features.
+num = "0.4"
+
+# Used by the Device_GetMachineId helper to base64 the per-machine seed
+# we cache in host localStorage.
+base64 = "0.22"
+
+# Aggressive size shrinking for release builds. Plugin .wasm is loaded
+# over the wire from the host; every kB matters.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
