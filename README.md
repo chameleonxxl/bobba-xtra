@@ -1,7 +1,7 @@
 # bobba-xtra
 
 WASM port of the Habbo Origins **BobbaXtra** native Director Xtra
-(`BobbaXtra.x32`) for [dirplayer-rs](https://github.com/chameleonxxl/fork-dirplayer),
+(`BobbaXtra.x32`) for [dirplayer-rs](https://github.com/igorlira/dirplayer-rs),
 built against the [`xtra-sdk`](https://github.com/chameleonxxl/dirplayer-rs/tree/main/xtra-sdk)
 plugin API.
 
